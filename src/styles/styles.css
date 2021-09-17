@@ -1,0 +1,22 @@
+#search-container {
+  display: grid;
+  grid-template-columns: 80% 20%;
+  width: 500px;
+}
+
+.search-error,
+#search-box {
+  grid-column: 1/2;
+}
+
+#search-btn {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  margin-left: 10px;
+}
+
+.search-error {
+  background-color: maroon;
+  color: white;
+  display: block;
+}
