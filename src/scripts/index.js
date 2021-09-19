@@ -1,4 +1,7 @@
 import "./../styles/styles.css";
+import { images } from "./modules/images.js";
+
+console.log(images);
 
 const searchBtn = document.getElementById("search-btn");
 const searchInput = document.getElementById("search-box");
@@ -16,46 +19,49 @@ searchInput.addEventListener("input", () => {
   }
 });
 
-async function searchBtnHandler() {
+function searchBtnHandler() {
   if (searchInput.value === "") {
     searchError.textContent = "Please enter a location";
   } else {
-    const data = await getWeatherData();
-    convertWeatherObject(data);
+    weatherForecast(searchInput.value);
   }
-}
 
-function searchLocation() {
-  return searchInput.value;
-}
-
-async function getWeatherData() {
-  const location = searchLocation();
-  try {
-    const request = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=[redacted]`
-    );
-
-    const data = await request.json();
-
-    if (!(data.cod == 200)) {
-      throw new Error(data.message);
-    } else {
-      console.log(data);
-      return data;
+  async function weatherForecast(location) {
+    try {
+      const data = await getWeatherData(location);
+      buildWeatherObject(data);
+    } catch (err) {
+      searchError.textContent = err;
     }
-  } catch (err) {
-    console.log(err);
   }
 }
 
-function convertWeatherObject(data) {
+async function getWeatherData(location) {
+  const request = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=[redacted]`
+  );
+
+  const data = await request.json();
+
+  if (!(data.cod == 200)) {
+    throw new Error(data.message);
+  } else {
+    return data;
+  }
+}
+
+function buildWeatherObject(data) {
   const obj = {
     name: data.name,
     temp: Math.round(data.main.temp - 273.15),
     weather: data.weather[0].main,
     desc: data.weather[0].description,
   };
+
+  let lowerCaseBackground =
+    obj.weather.charAt(0).toLowerCase() + obj.weather.slice(1);
+
+  obj.background = images[`${lowerCaseBackground}`];
 
   console.log(obj);
 }
