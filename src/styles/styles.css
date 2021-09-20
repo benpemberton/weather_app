@@ -1,3 +1,25 @@
+#weather-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 700px;
+  height: 466px;
+  background-size: cover;
+}
+
+#info-div {
+  width: 45%;
+  height: 40%;
+  background-color: RGBA(0, 0, 0, 0.45);
+}
+
+#icon-temp-div {
+  width: 20%;
+  height: 20%;
+  background-color: RGBA(0, 0, 0, 0.45);
+}
+
 #search-container {
   display: grid;
   grid-template-columns: 80% 20%;
@@ -19,4 +41,8 @@
   background-color: maroon;
   color: white;
   display: block;
+}
+
+.hidden {
+  display: none;
 }
