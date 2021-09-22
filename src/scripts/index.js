@@ -7,6 +7,10 @@ const searchError = document.querySelector(".search-error");
 const infoDiv = document.getElementById("info-div");
 const iconDiv = document.getElementById("icon-temp-div");
 const displayContainer = document.getElementById("weather-container");
+const weatherIcon = document.getElementById("weather-icon");
+const location = document.getElementById("location");
+const description = document.getElementById("desc");
+const temperature = document.getElementById("temp");
 
 searchBtn.addEventListener("click", searchBtnHandler);
 searchInput.addEventListener("keyup", (e) => {
@@ -68,6 +72,9 @@ function buildWeatherObject(data) {
 
   obj.background = images[`${lowerCaseWeather}`];
 
+  // making description upper case
+  obj.desc = obj.desc.charAt(0).toUpperCase() + obj.desc.slice(1);
+
   obj.icon = `http://openweathermap.org/img/wn/${determineIcon(
     obj.weatherID
   )}@2x.png`;
@@ -77,25 +84,28 @@ function buildWeatherObject(data) {
 }
 
 function populateDisplay(obj) {
-  clearDisplay();
+  // clearDisplay();
 
   infoDiv.classList.remove("hidden");
   iconDiv.classList.remove("hidden");
 
-  const icon = document.createElement("img");
+  weatherIcon.src = obj.icon;
 
-  icon.src = obj.icon;
+  temperature.innerHTML = obj.temp + "&#176;";
 
-  iconDiv.appendChild(icon);
+  location.textContent = obj.name;
+
+  description.textContent = obj.desc;
 
   displayContainer.style.backgroundImage = `url(${obj.background})`;
 }
 
-function clearDisplay() {
-  if (iconDiv.querySelector("img")) {
-    iconDiv.querySelector("img").remove();
-  }
-}
+// function clearDisplay() {
+//   if (weatherIcon.src !== "") {
+//     console.log("icon here");
+//     // iconDiv.querySelector("img").remove();
+//   }
+// }
 
 function determineIcon(id) {
   // 'thunderstorm'
