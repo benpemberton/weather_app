@@ -11,6 +11,7 @@ const weatherIcon = document.getElementById("weather-icon");
 const location = document.getElementById("location");
 const description = document.getElementById("desc");
 const temperature = document.getElementById("temp");
+const loading = document.getElementById("loading-screen");
 
 searchBtn.addEventListener("click", searchBtnHandler);
 searchInput.addEventListener("keyup", (e) => {
@@ -30,16 +31,31 @@ function searchBtnHandler() {
   } else {
     weatherForecast(searchInput.value);
   }
+}
 
-  async function weatherForecast(location) {
-    try {
-      const data = await getWeatherData(location);
-      const obj = buildWeatherObject(data);
-      populateDisplay(obj);
-    } catch (err) {
-      searchError.textContent = err;
-      console.log(err);
-    }
+async function weatherForecast(location) {
+  try {
+    loadingScreen();
+    const data = await getWeatherData(location);
+
+    const obj = buildWeatherObject(data);
+    loading.addEventListener(
+      "transitionend",
+      () => {
+        populateDisplay(obj);
+        clearLoadingScreen();
+      },
+      { once: true }
+    );
+  } catch (err) {
+    searchError.textContent = err;
+    loading.addEventListener(
+      "transitionend",
+      () => {
+        clearLoadingScreen();
+      },
+      { once: true }
+    );
   }
 }
 
@@ -70,9 +86,12 @@ function buildWeatherObject(data) {
   let lowerCaseWeather =
     obj.weather.charAt(0).toLowerCase() + obj.weather.slice(1);
 
-  obj.background = images[`${lowerCaseWeather}`];
+  if (checkForAtmosphere(lowerCaseWeather)) {
+    obj.background = images["atmosphere"];
+  } else {
+    obj.background = images[`${lowerCaseWeather}`];
+  }
 
-  // making description upper case
   obj.desc = obj.desc.charAt(0).toUpperCase() + obj.desc.slice(1);
 
   obj.icon = `http://openweathermap.org/img/wn/${determineIcon(
@@ -83,9 +102,25 @@ function buildWeatherObject(data) {
   return obj;
 }
 
-function populateDisplay(obj) {
-  // clearDisplay();
+function checkForAtmosphere(weather) {
+  const types = [
+    "mist",
+    "smoke",
+    "haze",
+    "dust",
+    "fog",
+    "sand",
+    "ash",
+    "squall",
+    "tornado",
+  ];
 
+  const found = types.find((type) => type === weather);
+
+  return found;
+}
+
+function populateDisplay(obj) {
   infoDiv.classList.remove("hidden");
   iconDiv.classList.remove("hidden");
 
@@ -100,12 +135,13 @@ function populateDisplay(obj) {
   displayContainer.style.backgroundImage = `url(${obj.background})`;
 }
 
-// function clearDisplay() {
-//   if (weatherIcon.src !== "") {
-//     console.log("icon here");
-//     // iconDiv.querySelector("img").remove();
-//   }
-// }
+function loadingScreen() {
+  loading.style.opacity = "1";
+}
+
+function clearLoadingScreen() {
+  loading.style.opacity = "0";
+}
 
 function determineIcon(id) {
   // 'thunderstorm'
