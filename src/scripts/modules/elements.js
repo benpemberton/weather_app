@@ -9,8 +9,10 @@ const location = document.getElementById("location");
 const description = document.getElementById("desc");
 const temperature = document.getElementById("temp");
 const loading = document.getElementById("loading-screen");
+const startText = document.getElementById("start-text");
 
 export {
+  startText,
   searchBtn,
   searchInput,
   searchError,

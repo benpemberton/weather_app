@@ -33,6 +33,7 @@ async function weatherForecast(location) {
     el.loading.addEventListener(
       "transitionend",
       () => {
+        el.startText.remove();
         populateDisplay(obj);
         clearLoadingScreen();
       },
@@ -109,6 +110,9 @@ function populateDisplay(obj) {
 }
 
 function loadingScreen() {
+  if (window.getComputedStyle(el.loading).visibility === "hidden") {
+    el.loading.style.visibility = "visible";
+  }
   el.loading.style.opacity = "1";
 }
 
