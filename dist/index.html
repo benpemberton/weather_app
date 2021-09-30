@@ -10,16 +10,36 @@
 <script defer src="main.js"></script><link href="main.css" rel="stylesheet"></head>
 
 <body>
-    <p>Hello!!!</p>
-    <div id='weather-container'>
-        <div id='icon-temp-div' class='hidden'></div>
-        <div id='info-div' class='hidden'></div>
+    <div id="title">
+        <h1>Weather App</h1>
     </div>
-    <div id='search-container'>
+    <div id="app-container">
+        <div id="weather-container">
+            <div id="icon-temp-div" class="hidden">
+                <div>
+                    <img id="weather-icon" src="">
+                    <h2 id="temp">22</h2>
+                </div>
+            </div>
+            <div id="start-text">
+                <p>Look for some weather info!</p>
+            </div>
+            <div id="info-div" class="hidden">
+                <div id="inner-text">
+                    <h2 id="location"></h2>
+                    <p id="desc"></p>
+                </div>
+            </div>
+        </div>
+        <div id="loading-screen">
+        </div>
+    </div>
+    <div id="search-container">
         <input id="search-box" type="text" placeholder="Search for a location...">
         <span class="search-error" aria-live="polite"></span>
         <button id="search-btn">Search</button>
     </div>
+
 
 </body>
 
