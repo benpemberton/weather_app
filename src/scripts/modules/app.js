@@ -53,7 +53,7 @@ async function weatherForecast(location) {
 
 async function getWeatherData(location) {
   const request = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=[redacted]`
+    `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=${process.env.WEATHER_APP_ID}`
   );
 
   const data = await request.json();
@@ -61,7 +61,6 @@ async function getWeatherData(location) {
   if (!(data.cod == 200)) {
     throw new Error(data.message);
   } else {
-    console.log(data);
     return data;
   }
 }
@@ -90,7 +89,6 @@ function buildWeatherObject(data) {
     obj.weatherID
   )}@2x.png`;
 
-  console.log(obj);
   return obj;
 }
 
